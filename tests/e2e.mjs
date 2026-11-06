@@ -406,6 +406,14 @@ await test('custom flow: saved flows load inside the builder, edits can be saved
   await page.click('.saved-btn');
   check((await page.$$('.saved-pop li')).length === 2, 'no duplicate created');
   await page.keyboard.press('Escape');
+  // edits can also be thrown away, back to the saved version
+  await addStep('split');
+  check(await page.isVisible('.save-actions .link-btn:has-text("Discard changes")'), 'discard offered when edited');
+  await page.click('.save-actions .link-btn:has-text("Discard changes")');
+  titles = await page.$$eval('.fnodes .fnode-title b', (e) => e.map((x) => x.textContent));
+  check(titles.join() === 'Merge,Compress', `discarded: ${titles}`);
+  check(!(await page.isVisible('.saved-btn .dirty')), 'marker cleared after discard');
+  check(!(await page.$('.save-actions .link-btn:has-text("Discard changes")')), 'discard hidden when clean');
 });
 
 await test('single tools have no pipeline or step numbers', async () => {

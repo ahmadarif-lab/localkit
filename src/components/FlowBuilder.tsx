@@ -34,6 +34,7 @@ import {
   Scissors,
   Shrink,
   TriangleAlert,
+  Undo2,
   Upload,
   X,
 } from 'lucide-preact';
@@ -543,6 +544,18 @@ function SaveFlow() {
             }}
           >
             <Save size={15} /> {t('recipe.update')}
+          </button>
+        )}
+        {active && recipeDirty.value && (
+          // back to the saved version; the files stay loaded
+          <button
+            class="link-btn muted"
+            onClick={() => {
+              loadRecipe(active);
+              toast(t('toast.recipeReverted', { name: active.name }));
+            }}
+          >
+            <Undo2 size={15} /> {t('recipe.discard')}
           </button>
         )}
         <button
