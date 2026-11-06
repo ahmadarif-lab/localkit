@@ -1,6 +1,6 @@
 {
   "name": "localkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Private, in-browser PDF & image toolkit. Nothing is uploaded.",
   "scripts": {
     "dev": "vite",
