@@ -674,6 +674,35 @@ await test('mobile layout has no horizontal scroll', async () => {
   await m.close();
 });
 
+await test('sign-in token is only accepted with this tab\'s nonce', async () => {
+  // separate context: the API is blocked here and does not count as external traffic
+  const c = await browser.newContext();
+  await c.route(/localkit-api/, (r) => r.abort());
+  const p = await c.newPage();
+  const tok = 'T'.repeat(43);
+  const stored = () => p.evaluate(() => localStorage.getItem('localkit:token'));
+  const nonce = 'N'.repeat(32);
+  try {
+    // a crafted link with someone else's token is ignored
+    await p.goto(`${BASE}/#lk_token=${tok}&lk_nonce=${nonce}`);
+    await p.waitForTimeout(300);
+    check((await stored()) === null, 'token from a crafted link was stored');
+    check(!(await p.evaluate(() => location.hash)), 'hash not cleared');
+    // the tab that started sign-in accepts its own redirect, once
+    await p.evaluate((n) => sessionStorage.setItem('localkit:signin', JSON.stringify({ nonce: n, exp: Date.now() + 60_000 })), nonce);
+    await p.goto(`${BASE}/settings#lk_token=${tok}&lk_nonce=${nonce}`);
+    await p.waitForTimeout(300);
+    check((await stored()) === tok, 'own sign-in redirect was rejected');
+    check((await p.evaluate(() => sessionStorage.getItem('localkit:signin'))) === null, 'nonce not consumed');
+    await p.evaluate(() => localStorage.removeItem('localkit:token'));
+    await p.goto(`${BASE}/#lk_token=${tok}&lk_nonce=${nonce}`);
+    await p.waitForTimeout(300);
+    check((await stored()) === null, 'replayed redirect was accepted');
+  } finally {
+    await c.close();
+  }
+});
+
 await test('no external requests, no console errors', async () => {
   check(!external.length, `external: ${[...new Set(external)].join(', ')}`);
   const real = errors.filter((e) => !/net::ERR_INTERNET_DISCONNECTED|Failed to load resource/.test(e));

@@ -18,6 +18,9 @@ export const API_URL: string = import.meta.env.VITE_API_URL ?? 'https://localkit
 const TOKEN_KEY = 'localkit:token';
 const SYNC_HISTORY_KEY = 'localkit:sync-history';
 const SETTINGS_AT_KEY = 'localkit:settings-at';
+/** per-tab sign-in nonce; sessionStorage survives the redirect to Google and back */
+const SIGNIN_KEY = 'localkit:signin';
+const SIGNIN_TTL = 10 * 60_000;
 const TOMBSTONE_TTL = 120 * 86_400_000;
 
 export interface Account {
@@ -217,7 +220,25 @@ function scheduleSync() {
 
 export function signIn() {
   const ret = `${location.origin}${location.pathname}`;
-  location.href = `${API_URL}/auth/google/start?return=${encodeURIComponent(ret)}`;
+  const nonce = b64url(crypto.getRandomValues(new Uint8Array(24)));
+  try {
+    sessionStorage.setItem(SIGNIN_KEY, JSON.stringify({ nonce, exp: Date.now() + SIGNIN_TTL }));
+  } catch {}
+  location.href = `${API_URL}/auth/google/start?return=${encodeURIComponent(ret)}&nonce=${nonce}`;
+}
+
+const b64url = (b: Uint8Array) => btoa(String.fromCharCode(...b)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+/** Returns and clears the nonce of the sign-in this tab started, if it is still fresh. */
+function takeSignInNonce(): string | null {
+  try {
+    const raw = sessionStorage.getItem(SIGNIN_KEY);
+    sessionStorage.removeItem(SIGNIN_KEY);
+    const p = raw ? (JSON.parse(raw) as { nonce?: string; exp?: number }) : null;
+    return p?.nonce && (p.exp ?? 0) > Date.now() ? p.nonce : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function signOut() {
@@ -250,16 +271,28 @@ async function loadAccount() {
   }
 }
 
-/** Picks up the result of a sign-in redirect (#lk_token=… / #lk_error=…). */
+/**
+ * Picks up the result of a sign-in redirect (#lk_token=…&lk_nonce=… / #lk_error=…).
+ * A token is only accepted together with the nonce this tab stored before it
+ * went to Google. Without that check, anyone could send a link carrying their
+ * own token and have the visitor's flows and history sync into their account.
+ */
 function readRedirect() {
   const m = /[#&]lk_(token|error)=([^&]+)/.exec(location.hash);
   if (!m) return;
+  const nonce = /[#&]lk_nonce=([^&]+)/.exec(location.hash)?.[1];
   window.history.replaceState(null, '', location.pathname + location.search);
+  const expected = takeSignInNonce();
   if (m[1] === 'token') {
+    if (!expected || nonce !== expected || !/^[A-Za-z0-9_-]{20,100}$/.test(m[2])) {
+      setTimeout(() => toast(t('cloud.err.failed'), 'error'), 400);
+      return;
+    }
     token = m[2];
     write(TOKEN_KEY, token);
     setTimeout(() => toast(t('cloud.signedIn')), 400);
   } else {
+    if (!expected) return; // an error nobody here asked for
     const code = decodeURIComponent(m[2]);
     const known = ['not_configured', 'cancelled', 'failed'].includes(code) ? code : 'failed';
     setTimeout(() => toast(t(`cloud.err.${known}`), 'error'), 400);
