@@ -1,0 +1,8 @@
+{
+  "name": "deepmerge",
+  "version": "4.3.2-localkit.1",
+  "description": "deepmerge 4.3.1 with a fix for GHSA-gcqx-w48m-w2h4 (prototype poisoning in mergeObject). No upstream fix exists yet.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT"
+}

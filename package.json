@@ -43,7 +43,8 @@
     "workbox-build": {
       "glob": "^14.0.4",
       "minimatch": "^11.0.5"
-    }
+    },
+    "deepmerge": "file:./vendor/deepmerge"
   },
   "allowScripts": {
     "fsevents": false,
