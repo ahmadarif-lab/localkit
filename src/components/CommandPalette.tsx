@@ -19,6 +19,7 @@ import {
   Workflow,
 } from 'lucide-preact';
 import { lang, setLang, t } from '../i18n';
+import { dropHint } from '../platform';
 import { TOOLS, TOOL_KEYWORDS } from '../tools';
 import { clearAll, goHome, goPage, openRecipe, openTool, recipes, sources } from '../state';
 import { isDark, toggleTheme } from '../theme';
@@ -145,7 +146,7 @@ function buildItems(): Item[] {
       id: 'act:files',
       group: 'actions',
       title: t('palette.addFiles'),
-      sub: t('drop.sub'),
+      sub: dropHint(),
       icon: <FilePlus size={18} />,
       keywords: 'add files upload tambah file buka open choose pilih',
       run: () => pickFiles('any', startWithFiles),

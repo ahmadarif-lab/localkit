@@ -679,7 +679,17 @@ await test('mobile layout has no horizontal scroll', async () => {
     const overflow = await m.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     check(overflow <= 0, `/${path} overflows by ${overflow}px`);
   }
+  await m.goto(`${BASE}/`);
+  const hint = await m.textContent('.hero-drop small');
+  check(!/paste|V\b/.test(hint), `no paste shortcut on touch: ${hint}`);
   await m.close();
+});
+
+await test('paste hint names this platform\'s shortcut', async () => {
+  await page.goto(`${BASE}/`);
+  const hint = await page.textContent('.hero-drop small');
+  const key = process.platform === 'darwin' ? '⌘V' : 'Ctrl+V';
+  check(hint.endsWith(`paste with ${key}`), `hint: ${hint}`);
 });
 
 await test('sign-in token is only accepted with this tab\'s nonce', async () => {

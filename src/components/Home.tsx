@@ -17,6 +17,7 @@ import { TOOLS, toolsIn, type Tool, type ToolId } from '../tools';
 import { openTool, sources } from '../state';
 import { pickFiles, startWithFiles } from '../picker';
 import { REPO_URL } from './Header';
+import { dropHint } from '../platform';
 import { ToolIcon } from './Icons';
 import { SourceChip } from './Board';
 import { HeroArt } from './HeroArt';
@@ -93,7 +94,7 @@ export function Home() {
           <Upload size={24} />
         </span>
         <b>{t('drop.title')}</b>
-        <small>{t('drop.sub')}</small>
+        <small>{dropHint()}</small>
         <span class="btn primary">
           <FolderOpen size={17} /> {t('drop.button')}
         </span>

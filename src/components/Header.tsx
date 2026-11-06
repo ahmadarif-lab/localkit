@@ -9,7 +9,8 @@ import { Search } from 'lucide-preact';
 
 export const REPO_URL = 'https://github.com/ahmadarif-lab/localkit';
 
-export const IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform);
+import { IS_MAC } from '../platform';
+export { IS_MAC };
 export const privacyOpen = signal(false);
 const online = signal(navigator.onLine);
 addEventListener('online', () => (online.value = true));

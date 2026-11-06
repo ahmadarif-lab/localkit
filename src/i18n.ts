@@ -6,7 +6,8 @@ const id = {
   'hero.sub':
     'Gabung, pisah, kompres, crop, hapus background, dan banyak lagi untuk PDF & gambar. Semua berjalan di browser kamu, tidak ada file yang keluar dari perangkat.',
   'drop.title': 'Seret file ke sini',
-  'drop.sub': 'PDF, JPG, PNG, WebP, HEIC · atau tempel dengan Ctrl+V',
+  'drop.sub': 'PDF, JPG, PNG, WebP, HEIC',
+  'drop.paste': 'atau tempel dengan {key}',
   'drop.button': 'Pilih file',
   'drop.overlay': 'Lepas untuk menambahkan',
   'home.tools': 'Atau mulai dari alat',
@@ -493,7 +494,8 @@ const en: Record<Key, string> & Record<string, string> = {
   'hero.sub':
     'Merge, split, compress, crop, remove backgrounds and more for PDFs & images. Everything runs in your browser, so no file ever leaves your device.',
   'drop.title': 'Drop files here',
-  'drop.sub': 'PDF, JPG, PNG, WebP, HEIC · or paste with Ctrl+V',
+  'drop.sub': 'PDF, JPG, PNG, WebP, HEIC',
+  'drop.paste': 'or paste with {key}',
   'drop.button': 'Choose files',
   'drop.overlay': 'Drop to add',
   'home.tools': 'Or start with a tool',
