@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dev-dist/
+tests/fixtures/
+.wrangler/
+.DS_Store
+*.log
+public/models/

@@ -1,0 +1,51 @@
+{
+  "name": "localkit",
+  "version": "0.1.0",
+  "description": "Private, in-browser PDF & image toolkit. Nothing is uploaded.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "node tests/e2e.mjs",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "@preact/signals": "^2.11.4",
+    "fflate": "^0.8.3",
+    "gifenc": "^1.0.3",
+    "heic2any": "^0.0.4",
+    "lucide-preact": "^1.70.0",
+    "onnxruntime-web": "^1.31.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.5.438",
+    "preact": "^11.2.0",
+    "sortablejs": "^1.15.7"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@types/node": "^26.6.6",
+    "@types/sortablejs": "^1.15.9",
+    "playwright-core": "^1.65.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6",
+    "vite-plugin-pwa": "^2.0.0",
+    "vite-plugin-static-copy": "^4.1.1"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26.13.0"
+  },
+  "overrides": {
+    "workbox-build": {
+      "glob": "^14.0.4",
+      "minimatch": "^11.0.5"
+    }
+  },
+  "allowScripts": {
+    "fsevents": false,
+    "protobufjs": false
+  }
+}
