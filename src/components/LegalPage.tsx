@@ -5,7 +5,7 @@ import { REPO_URL } from './Header';
 
 type Doc = { title: string; updated: string; sections: [string, string[]][] };
 
-const UPDATED = '2026-11-06';
+const UPDATED = '2026-11-25';
 
 const PRIVACY: Record<'en' | 'id', Doc> = {
   en: {
@@ -35,6 +35,11 @@ const PRIVACY: Record<'en' | 'id', Doc> = {
       ]],
       ['Google user data', [
         'Localkit\'s use of information received from Google APIs adheres to the Google API Services User Data Policy, including the Limited Use requirements. We request only the basic openid, email and profile scopes.',
+      ]],
+      ['Android app', [
+        'The Localkit app for Android (id.ahmadarif.localkit) processes files on the device in the same way. It has no internet permission, so it cannot upload files, send statistics or contact any server, and it has no account or cloud save.',
+        'Files you pick or share to the app are copied into the app\'s temporary storage, processed there, and the results stay until you save them to Download/Localkit or share them. This storage is cleared every time the app starts. The app asks for no camera, location, microphone, contacts or storage permission.',
+        'Background removal in the app uses Google\'s ML Kit Subject Segmentation, which runs on the device. Its model is installed once by Google Play services under Google\'s privacy policy; your photos are not sent to Google or to us.',
       ]],
       ['Contact', [`Questions or requests: open an issue at ${REPO_URL}.`]],
     ],
@@ -66,6 +71,11 @@ const PRIVACY: Record<'en' | 'id', Doc> = {
       ]],
       ['Data pengguna Google', [
         'Penggunaan informasi dari Google API oleh Localkit mematuhi Google API Services User Data Policy, termasuk ketentuan Limited Use. Kami hanya meminta scope dasar openid, email, dan profile.',
+      ]],
+      ['Aplikasi Android', [
+        'Aplikasi Localkit untuk Android (id.ahmadarif.localkit) mengolah file di perangkat dengan cara yang sama. Aplikasi tidak punya izin internet, jadi tidak bisa mengunggah file, mengirim statistik, atau menghubungi server mana pun, dan tidak memakai akun maupun cloud save.',
+        'File yang kamu pilih atau bagikan ke aplikasi disalin ke penyimpanan sementara aplikasi, diproses di sana, dan hasilnya tetap ada sampai kamu simpan ke Download/Localkit atau bagikan. Penyimpanan ini dikosongkan setiap kali aplikasi dibuka. Aplikasi tidak meminta izin kamera, lokasi, mikrofon, kontak, atau penyimpanan.',
+        'Fitur hapus background di aplikasi memakai ML Kit Subject Segmentation dari Google yang berjalan di perangkat. Modelnya dipasang sekali oleh Google Play services sesuai kebijakan privasi Google; foto kamu tidak dikirim ke Google maupun ke kami.',
       ]],
       ['Kontak', [`Pertanyaan atau permintaan: buka issue di ${REPO_URL}.`]],
     ],
